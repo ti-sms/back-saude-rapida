@@ -1,0 +1,26 @@
+{
+  "name": "back-saude-rapida",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node index"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ti-sms/back-saude-rapida.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/ti-sms/back-saude-rapida/issues"
+  },
+  "homepage": "https://github.com/ti-sms/back-saude-rapida#readme",
+  "description": "",
+  "devDependencies": {
+    "prisma": "^6.2.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
+  }
+}
