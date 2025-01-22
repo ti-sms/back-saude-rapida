@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,4 +5,145 @@ generator client {
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
+}
+
+model address {
+  addressId       Int     @id @unique(map: "addressId_UNIQUE") @default(autoincrement())
+  addressStreet   String? @db.VarChar(60)
+  addressDistrict String? @db.VarChar(45)
+  addressNumer    String? @db.VarChar(10)
+  addressCity     String? @db.VarChar(45)
+  addressState    String? @default("CE") @db.VarChar(45)
+  addressCep      String? @db.VarChar(45)
+}
+
+model car {
+  carId           Int     @id @unique(map: "carId_UNIQUE") @default(autoincrement())
+  carName         String  @db.VarChar(100)
+  carPlate        String  @db.VarChar(15)
+  carModel        String  @db.VarChar(100)
+  carType         String  @db.VarChar(45)
+  carBrand        String  @db.VarChar(100)
+  carqQtdVacancy  Int
+  carObservations String? @db.LongText
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model generalconfig {
+  idgeneralConfig              Int     @unique(map: "idgeneralConfig_UNIQUE") @default(autoincrement())
+  logoImage                    String? @db.VarChar(45)
+  useCoordinatorCollaboratorId Int
+  address_addressId            Int
+
+  @@id([idgeneralConfig, address_addressId])
+  @@index([address_addressId], map: "fk_generalConfig_address1_idx")
+}
+
+model hospital {
+  hospitalId          Int     @unique(map: "hospitalId_UNIQUE") @default(autoincrement())
+  hospitalName        String? @db.VarChar(45)
+  hospitalDescription String? @db.LongText
+  address_addressId   Int
+
+  @@id([hospitalId, address_addressId])
+  @@index([address_addressId], map: "fk_hospital_address1_idx")
+}
+
+model local {
+  localId           Int     @unique(map: "localId_UNIQUE") @default(autoincrement())
+  localName         String? @db.VarChar(45)
+  address_addressId Int
+
+  @@id([localId, address_addressId])
+  @@index([address_addressId], map: "fk_local_address1_idx")
+}
+
+model location {
+  locationId                        Int     @unique(map: "locationId_UNIQUE") @default(autoincrement())
+  locationDateTimeInitial           String  @db.VarChar(45)
+  locationDateTimeFinal             String? @db.VarChar(45)
+  locationObservations              String? @db.LongText
+  userPermission_driverPermissionId Int
+  car_carId                         Int
+  local_localId                     Int
+
+  @@id([locationId, userPermission_driverPermissionId, car_carId, local_localId])
+  @@index([car_carId], map: "fk_location_car1_idx")
+  @@index([local_localId], map: "fk_location_local1_idx")
+  @@index([userPermission_driverPermissionId], map: "fk_location_userPermission1_idx")
+}
+
+model patientspecify {
+  patientSpecifyId    Int     @unique(map: "patientSpecifyId_UNIQUE") @default(autoincrement())
+  patientCompanyName  String? @db.VarChar(45)
+  patientCompanyPhone String? @db.VarChar(45)
+  person_patientId    Int
+
+  @@id([patientSpecifyId, person_patientId])
+  @@index([person_patientId], map: "fk_patientSpecify_person1_idx")
+}
+
+model person {
+  patientId         Int     @unique(map: "patientId_UNIQUE") @default(autoincrement())
+  personName        String  @db.VarChar(100)
+  personCpf         String  @db.VarChar(45)
+  personCNS         String? @db.VarChar(45)
+  personPhone       String? @db.VarChar(20)
+  address_addressId Int
+
+  @@id([patientId, address_addressId])
+  @@index([address_addressId], map: "fk_person_address1_idx")
+}
+
+model trip {
+  tripId                            Int     @unique(map: "tripId_UNIQUE") @default(autoincrement())
+  tripDateTimeStart                 String  @db.VarChar(45)
+  tripDateTimeFinish                String? @db.VarChar(45)
+  tripState                         String  @db.VarChar(45)
+  car_carId                         Int
+  userPermission_driverPermissionid Int
+
+  @@id([tripId, car_carId, userPermission_driverPermissionid])
+  @@index([car_carId], map: "fk_trip_car1_idx")
+  @@index([userPermission_driverPermissionid], map: "fk_trip_userPermission1_idx")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model user {
+  userId             Int    @id @unique(map: "userId_UNIQUE") @default(autoincrement())
+  userEmail          String @db.VarChar(100)
+  userPassword       String @db.VarChar(20)
+  userSusKey         String @db.LongText
+  userCollaboratorId Int?
+}
+
+model userpermission {
+  userPermissionId   Int    @unique(map: "userPermissionId_UNIQUE") @default(autoincrement())
+  userPermissionType String @db.VarChar(45)
+  userType           String @db.VarChar(45)
+  userStatus         Int    @db.TinyInt
+  person_persontId   Int
+  user_userId        Int
+
+  @@id([userPermissionId, person_persontId, user_userId])
+  @@index([person_persontId], map: "fk_userPermission_person1_idx")
+  @@index([user_userId], map: "fk_userPermission_user1_idx")
+}
+
+model vacacionpatient {
+  vacacionPatientId                  Int     @unique(map: "vacacionPatientId_UNIQUE") @default(autoincrement())
+  forwardingImage                    String? @db.LongText
+  patienteHaveCourtJudicial          Int?    @default(0) @db.TinyInt
+  patientCourtJudicialCode           String? @default("0") @db.VarChar(45)
+  PatientHaveCompany                 Int     @default(0) @db.TinyInt
+  CompanyName                        String? @db.VarChar(60)
+  companyPhone                       String? @db.VarChar(45)
+  userPermission_patientPermissionId Int
+  hospital_hospitalId                Int
+  trip_tripId                        Int
+
+  @@id([vacacionPatientId, userPermission_patientPermissionId, hospital_hospitalId, trip_tripId])
+  @@index([hospital_hospitalId], map: "fk_vacacionPatient_hospital1_idx")
+  @@index([trip_tripId], map: "fk_vacacionPatient_trip1_idx")
+  @@index([userPermission_patientPermissionId], map: "fk_vacacionPatient_userPermission1_idx")
 }
