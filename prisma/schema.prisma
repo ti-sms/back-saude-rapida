@@ -8,64 +8,78 @@ datasource db {
 }
 
 model address {
-  addressId       Int     @id @unique(map: "addressId_UNIQUE") @default(autoincrement())
-  addressStreet   String? @db.VarChar(60)
-  addressDistrict String? @db.VarChar(45)
-  addressNumer    String? @db.VarChar(10)
-  addressCity     String? @db.VarChar(45)
-  addressState    String? @default("CE") @db.VarChar(45)
-  addressCep      String? @db.VarChar(45)
+  addressId       String          @id @unique(map: "addressId_UNIQUE") @db.VarChar(60)
+  addressStreet   String?         @db.VarChar(60)
+  addressDistrict String?         @db.VarChar(45)
+  addressNumber   String?         @db.VarChar(10)
+  addressCity     String?         @db.VarChar(45)
+  addressState    String?         @default("CE") @db.VarChar(45)
+  addressCep      String?         @db.VarChar(45)
+  generalconfig   generalconfig[]
+  hospital        hospital[]
+  local           local[]
+  person          person[]
 }
 
 model car {
-  carId           Int     @id @unique(map: "carId_UNIQUE") @default(autoincrement())
-  carName         String  @db.VarChar(100)
-  carPlate        String  @db.VarChar(15)
-  carModel        String  @db.VarChar(100)
-  carType         String  @db.VarChar(45)
-  carBrand        String  @db.VarChar(100)
+  carId           String     @id @unique(map: "carId_UNIQUE") @db.VarChar(60)
+  carName         String     @db.VarChar(100)
+  carPlate        String     @db.VarChar(15)
+  carModel        String     @db.VarChar(100)
+  carType         String     @db.VarChar(45)
+  carBrand        String     @db.VarChar(100)
   carqQtdVacancy  Int
-  carObservations String? @db.LongText
+  carObservations String?    @db.LongText
+  location        location[]
+  trip            trip[]
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model generalconfig {
-  idgeneralConfig              Int     @unique(map: "idgeneralConfig_UNIQUE") @default(autoincrement())
+  idgeneralConfig              String  @unique(map: "idgeneralConfig_UNIQUE") @db.VarChar(60)
   logoImage                    String? @db.VarChar(45)
   useCoordinatorCollaboratorId Int
-  address_addressId            Int
+  address_addressId            String  @db.VarChar(60)
+  address                      address @relation(fields: [address_addressId], references: [addressId], onDelete: NoAction, onUpdate: NoAction, map: "fk_generalConfig_address1")
 
   @@id([idgeneralConfig, address_addressId])
   @@index([address_addressId], map: "fk_generalConfig_address1_idx")
 }
 
 model hospital {
-  hospitalId          Int     @unique(map: "hospitalId_UNIQUE") @default(autoincrement())
-  hospitalName        String? @db.VarChar(45)
-  hospitalDescription String? @db.LongText
-  address_addressId   Int
+  hospitalId          String            @unique(map: "hospitalId_UNIQUE") @db.VarChar(60)
+  hospitalName        String?           @db.VarChar(45)
+  hospitalDescription String?           @db.LongText
+  address_addressId   String            @db.VarChar(60)
+  address             address           @relation(fields: [address_addressId], references: [addressId], onDelete: NoAction, onUpdate: NoAction, map: "fk_hospital_address1")
+  vacacionpatient     vacacionpatient[]
 
   @@id([hospitalId, address_addressId])
   @@index([address_addressId], map: "fk_hospital_address1_idx")
 }
 
 model local {
-  localId           Int     @unique(map: "localId_UNIQUE") @default(autoincrement())
-  localName         String? @db.VarChar(45)
-  address_addressId Int
+  localId           String     @unique(map: "localId_UNIQUE") @db.VarChar(60)
+  localName         String?    @db.VarChar(45)
+  address_addressId String     @db.VarChar(60)
+  address           address    @relation(fields: [address_addressId], references: [addressId], onDelete: NoAction, onUpdate: NoAction, map: "fk_local_address1")
+  location          location[]
 
   @@id([localId, address_addressId])
   @@index([address_addressId], map: "fk_local_address1_idx")
 }
 
 model location {
-  locationId                        Int     @unique(map: "locationId_UNIQUE") @default(autoincrement())
-  locationDateTimeInitial           String  @db.VarChar(45)
-  locationDateTimeFinal             String? @db.VarChar(45)
-  locationObservations              String? @db.LongText
-  userPermission_driverPermissionId Int
-  car_carId                         Int
-  local_localId                     Int
+  locationId                        String         @unique(map: "locationId_UNIQUE") @db.VarChar(60)
+  locationDateTimeInitial           String         @db.VarChar(45)
+  locationDateTimeFinal             String?        @db.VarChar(45)
+  locationObservations              String?        @db.LongText
+  userPermission_driverPermissionId String         @db.VarChar(60)
+  car_carId                         String         @db.VarChar(60)
+  local_localId                     String         @db.VarChar(60)
+  car                               car            @relation(fields: [car_carId], references: [carId], onDelete: NoAction, onUpdate: NoAction, map: "fk_location_car1")
+  local                             local          @relation(fields: [local_localId], references: [localId], onDelete: NoAction, onUpdate: NoAction, map: "fk_location_local1")
+  userpermission                    userpermission @relation(fields: [userPermission_driverPermissionId], references: [userPermissionId], onDelete: NoAction, onUpdate: NoAction, map: "fk_location_userPermission1")
 
   @@id([locationId, userPermission_driverPermissionId, car_carId, local_localId])
   @@index([car_carId], map: "fk_location_car1_idx")
@@ -74,34 +88,41 @@ model location {
 }
 
 model patientspecify {
-  patientSpecifyId    Int     @unique(map: "patientSpecifyId_UNIQUE") @default(autoincrement())
+  patientSpecifyId    String  @unique(map: "patientSpecifyId_UNIQUE") @db.VarChar(60)
   patientCompanyName  String? @db.VarChar(45)
   patientCompanyPhone String? @db.VarChar(45)
-  person_patientId    Int
+  person_patientId    String  @db.VarChar(60)
+  person              person  @relation(fields: [person_patientId], references: [patientId], onDelete: NoAction, onUpdate: NoAction, map: "fk_patientSpecify_person1")
 
   @@id([patientSpecifyId, person_patientId])
   @@index([person_patientId], map: "fk_patientSpecify_person1_idx")
 }
 
 model person {
-  patientId         Int     @unique(map: "patientId_UNIQUE") @default(autoincrement())
-  personName        String  @db.VarChar(100)
-  personCpf         String  @db.VarChar(45)
-  personCNS         String? @db.VarChar(45)
-  personPhone       String? @db.VarChar(20)
-  address_addressId Int
+  patientId         String           @unique(map: "patientId_UNIQUE") @db.VarChar(60)
+  personName        String           @db.VarChar(100)
+  personCpf         String           @db.VarChar(45)
+  personCNS         String?          @db.VarChar(45)
+  personPhone       String?          @db.VarChar(20)
+  address_addressId String           @db.VarChar(60)
+  patientspecify    patientspecify[]
+  address           address          @relation(fields: [address_addressId], references: [addressId], onDelete: NoAction, onUpdate: NoAction, map: "fk_person_address1")
+  userpermission    userpermission[]
 
   @@id([patientId, address_addressId])
   @@index([address_addressId], map: "fk_person_address1_idx")
 }
 
 model trip {
-  tripId                            Int     @unique(map: "tripId_UNIQUE") @default(autoincrement())
-  tripDateTimeStart                 String  @db.VarChar(45)
-  tripDateTimeFinish                String? @db.VarChar(45)
-  tripState                         String  @db.VarChar(45)
-  car_carId                         Int
-  userPermission_driverPermissionid Int
+  tripId                            String            @unique(map: "tripId_UNIQUE") @db.VarChar(60)
+  tripDateTimeStart                 String            @db.VarChar(45)
+  tripDateTimeFinish                String?           @db.VarChar(45)
+  tripState                         String            @db.VarChar(45)
+  car_carId                         String            @db.VarChar(60)
+  userPermission_driverPermissionid String            @db.VarChar(60)
+  car                               car               @relation(fields: [car_carId], references: [carId], onDelete: NoAction, onUpdate: NoAction, map: "fk_trip_car1")
+  userpermission                    userpermission    @relation(fields: [userPermission_driverPermissionid], references: [userPermissionId], onDelete: NoAction, onUpdate: NoAction, map: "fk_trip_userPermission1")
+  vacacionpatient                   vacacionpatient[]
 
   @@id([tripId, car_carId, userPermission_driverPermissionid])
   @@index([car_carId], map: "fk_trip_car1_idx")
@@ -110,20 +131,26 @@ model trip {
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model user {
-  userId             Int    @id @unique(map: "userId_UNIQUE") @default(autoincrement())
-  userEmail          String @db.VarChar(100)
-  userPassword       String @db.VarChar(20)
-  userSusKey         String @db.LongText
+  userId             String           @id @unique(map: "userId_UNIQUE") @db.VarChar(60)
+  userEmail          String           @db.VarChar(100)
+  userPassword       String           @db.VarChar(20)
+  userSusKey         String           @db.LongText
   userCollaboratorId Int?
+  userpermission     userpermission[]
 }
 
 model userpermission {
-  userPermissionId   Int    @unique(map: "userPermissionId_UNIQUE") @default(autoincrement())
-  userPermissionType String @db.VarChar(45)
-  userType           String @db.VarChar(45)
-  userStatus         Int    @db.TinyInt
-  person_persontId   Int
-  user_userId        Int
+  userPermissionId   String            @unique(map: "userPermissionId_UNIQUE") @db.VarChar(60)
+  userPermissionType String            @db.VarChar(45)
+  userType           String            @db.VarChar(45)
+  userStatus         Int               @db.TinyInt
+  person_persontId   String            @db.VarChar(60)
+  user_userId        String            @db.VarChar(60)
+  location           location[]
+  trip               trip[]
+  person             person            @relation(fields: [person_persontId], references: [patientId], onDelete: NoAction, onUpdate: NoAction, map: "fk_userPermission_person1")
+  user               user              @relation(fields: [user_userId], references: [userId], onDelete: NoAction, onUpdate: NoAction, map: "fk_userPermission_user1")
+  vacacionpatient    vacacionpatient[]
 
   @@id([userPermissionId, person_persontId, user_userId])
   @@index([person_persontId], map: "fk_userPermission_person1_idx")
@@ -131,16 +158,19 @@ model userpermission {
 }
 
 model vacacionpatient {
-  vacacionPatientId                  Int     @unique(map: "vacacionPatientId_UNIQUE") @default(autoincrement())
-  forwardingImage                    String? @db.LongText
-  patienteHaveCourtJudicial          Int?    @default(0) @db.TinyInt
-  patientCourtJudicialCode           String? @default("0") @db.VarChar(45)
-  PatientHaveCompany                 Int     @default(0) @db.TinyInt
-  CompanyName                        String? @db.VarChar(60)
-  companyPhone                       String? @db.VarChar(45)
-  userPermission_patientPermissionId Int
-  hospital_hospitalId                Int
-  trip_tripId                        Int
+  vacacionPatientId                  String         @unique(map: "vacacionPatientId_UNIQUE") @db.VarChar(60)
+  forwardingImage                    String?        @db.LongText
+  patienteHaveCourtJudicial          Int?           @default(0) @db.TinyInt
+  patientCourtJudicialCode           String?        @default("0") @db.VarChar(45)
+  PatientHaveCompany                 Int            @default(0) @db.TinyInt
+  CompanyName                        String?        @db.VarChar(60)
+  companyPhone                       String?        @db.VarChar(45)
+  userPermission_patientPermissionId String         @db.VarChar(60)
+  hospital_hospitalId                String         @db.VarChar(60)
+  trip_tripId                        String         @db.VarChar(60)
+  hospital                           hospital       @relation(fields: [hospital_hospitalId], references: [hospitalId], onDelete: NoAction, onUpdate: NoAction, map: "fk_vacacionPatient_hospital1")
+  trip                               trip           @relation(fields: [trip_tripId], references: [tripId], onDelete: NoAction, onUpdate: NoAction, map: "fk_vacacionPatient_trip1")
+  userpermission                     userpermission @relation(fields: [userPermission_patientPermissionId], references: [userPermissionId], onDelete: NoAction, onUpdate: NoAction, map: "fk_vacacionPatient_userPermission1")
 
   @@id([vacacionPatientId, userPermission_patientPermissionId, hospital_hospitalId, trip_tripId])
   @@index([hospital_hospitalId], map: "fk_vacacionPatient_hospital1_idx")

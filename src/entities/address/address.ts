@@ -1,37 +1,66 @@
 export type AddressProps = {
-  id: string;
-  street?: string;
-  district?: string;
-  number?: string;
-  city?: string;
-  state?: string;
-  cep?: string;
+  addressId: string;
+  addressStreet: string | null;
+  addressDistrict: string | null;
+  addressNumber: string | null;
+  addressCity: string | null;
+  addressState: string | null;
+  addressCep: string | null;
 };
 
 export class Address {
     private constructor (readonly props: AddressProps){}
 
-    public static create(street: string, district: string, number: string, city: string, state: string, cep:string ) {
+    public static create(addressStreet: string, addressDistrict: string, addressNumber: string, addressCity: string, addressState: string, addressCep:string ) {
         return new Address({
-            id: crypto.randomUUID().toString(),
-            street,
-            district,
-            number,
-            city,
-            state,
-            cep
+            addressId: crypto.randomUUID().toString(),
+            addressStreet,
+            addressNumber,
+            addressCity,
+            addressDistrict,
+            addressState,
+            addressCep
         })
     }
 
-    public get address(){
-        return {
-            id: this.props.id,
-            street: this.props.street,
-            district: this.props.district,
-            number: this.props.number,
-            city: this.props.city,
-            state: this.props.state,
-            cep: this.props.cep
-        }
+    public static with(addressId: string, addressStreet: string | null, addressDistrict:  string | null, addressNumber:  string | null, addressCity:  string | null, addressState:  string | null, addressCep: string | null) {
+        return new Address({
+            addressId,
+            addressStreet,
+            addressNumber,
+            addressCity,
+            addressDistrict,
+            addressState,
+            addressCep
+        });
     }
+    
+    public get id(){
+        return this.props.addressId;
+    }
+
+    public get street(){
+        return this.props.addressStreet;
+    }
+
+    public get district(){
+        return this.props.addressDistrict;
+    }
+     
+    public get number(){
+        return this.props.addressNumber;
+    }
+
+    public get city(){
+        return this.props.addressCity;
+    }
+
+    public get state(){
+        return this.props.addressState;
+    }
+
+    public get cep(){
+        return this.props.addressCep;
+    }
+
 }

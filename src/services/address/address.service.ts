@@ -8,6 +8,10 @@ export type FindOutPutDto = {
   cep: string;
 };
 
+export type CreateOutputDto = {
+  id: string;
+};
+
 export interface AddressService {
   find(id: string): Promise<FindOutPutDto>;
   create(
@@ -15,10 +19,10 @@ export interface AddressService {
     street: string,
     district: string,
     number: string,
-    city: string,
+    city: string, 
     state: string,
     cep: string
-  ): Promise<void>;
+  ): Promise<CreateOutputDto>;
   update(
     id: string,
     street: string,
