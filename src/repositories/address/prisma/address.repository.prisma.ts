@@ -55,21 +55,21 @@ export class AddressRepositoryPrisma implements AddressRepository {
 
     const {
       addressStreet,
-      addressNumber,
-      addressCity,
       addressDistrict,
+      addressCity,
       addressState,
-      addressCep
+      addressCep,
+      addressNumber
     } = aAddress;
 
     const address = Address.with( 
       addressId,
       addressStreet,
-      addressNumber,
-      addressCity,
       addressDistrict,
+      addressCity,
       addressState,
-      addressCep
+      addressCep,
+      addressNumber
     );
 
     return address;

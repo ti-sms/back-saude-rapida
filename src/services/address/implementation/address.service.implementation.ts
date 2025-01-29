@@ -50,10 +50,10 @@ export class AddressServiceImplementation implements AddressService {
       id: aAddress.id,
       street: aAddress.street ?? "",
       district: aAddress.district ?? "",
-      number: aAddress.number ?? "",
       city: aAddress.city ?? "",
       state: aAddress.state ?? "",
       cep: aAddress.cep ?? "",
+      number: aAddress.number ?? ""
     };
 
     return output;

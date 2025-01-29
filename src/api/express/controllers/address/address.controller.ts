@@ -21,11 +21,11 @@ export class AddressController {
 
       const data = {
         street: output.street,
-        city: output.city,
         district: output.district,
-        cep: output.cep,
-        mumber: output.number,
+        city: output.city,
         state: output.state,
+        cep: output.cep,
+        number: output.number,
       };
 
       response.status(201).json(data).send();
