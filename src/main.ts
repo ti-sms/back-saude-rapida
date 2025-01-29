@@ -8,6 +8,7 @@ import { AddressController } from "./api/express/controllers/address/address.con
 
     api.addPostRoute("/address/create", controller.create);
     api.addGetRoute("/address/:id", controller.find);
+    api.addUpdateRoute("/address/update/:id", controller.update);
 
     api.start(8000);
 }

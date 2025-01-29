@@ -13,25 +13,26 @@ export class AddressRepositoryPrisma implements AddressRepository {
     const data = {
       addressId: address.id,
       addressStreet: address.street,
-      addressState: address.state,
-      addressCity: address.city,
-      addressCep: address.cep,
       addressDistrict: address.district,
-      addressNumber: address.number,
+      addressCity: address.city,
+      addressState: address.state,
+      addressCep: address.cep,
+      addressNumber: address.number
     };
 
     await this.prisma.address.create({ data });
   }
 
   public async update(address: Address): Promise<void> {
+
     const data = {
       addressId: address.id,
       addressStreet: address.street,
-      addressState: address.state,
-      addressCity: address.city,
-      addressCep: address.cep,
       addressDistrict: address.district,
-      addressNumber: address.number,
+      addressCity: address.city,
+      addressState: address.state,
+      addressCep: address.cep,
+      addressNumber: address.number
     };
 
     await this.prisma.address.update({
@@ -43,7 +44,7 @@ export class AddressRepositoryPrisma implements AddressRepository {
   }
 
   public async find(addressId: string): Promise<Address | null> {
-    console.log("find");
+
     const aAddress = await this.prisma.address.findUnique({
       where: { addressId },
     });
@@ -54,20 +55,20 @@ export class AddressRepositoryPrisma implements AddressRepository {
 
     const {
       addressStreet,
-      addressState,
-      addressCity,
-      addressCep,
-      addressDistrict,
       addressNumber,
+      addressCity,
+      addressDistrict,
+      addressState,
+      addressCep
     } = aAddress;
 
     const address = Address.with( 
       addressId,
       addressStreet,
-      addressState,
+      addressNumber,
       addressCity,
       addressDistrict,
-      addressNumber,
+      addressState,
       addressCep
     );
 

@@ -2,36 +2,36 @@ export type AddressProps = {
   addressId: string;
   addressStreet: string | null;
   addressDistrict: string | null;
-  addressNumber: string | null;
   addressCity: string | null;
   addressState: string | null;
   addressCep: string | null;
+  addressNumber: string | null;
 };
 
 export class Address {
     private constructor (readonly props: AddressProps){}
 
-    public static create(addressStreet: string, addressDistrict: string, addressNumber: string, addressCity: string, addressState: string, addressCep:string ) {
+    public static create(addressStreet: string, addressDistrict: string, addressCity: string, addressState: string, addressCep:string, addressNumber: string ) {
         return new Address({
             addressId: crypto.randomUUID().toString(),
             addressStreet,
-            addressNumber,
-            addressCity,
             addressDistrict,
+            addressCity,
             addressState,
-            addressCep
+            addressCep,
+            addressNumber
         })
     }
 
-    public static with(addressId: string, addressStreet: string | null, addressDistrict:  string | null, addressNumber:  string | null, addressCity:  string | null, addressState:  string | null, addressCep: string | null) {
+    public static with(addressId: string, addressStreet: string | null, addressDistrict:  string | null, addressCity:  string | null, addressState:  string | null, addressCep:  string | null, addressNumber: string | null) {
         return new Address({
             addressId,
             addressStreet,
-            addressNumber,
-            addressCity,
             addressDistrict,
+            addressCity,
             addressState,
-            addressCep
+            addressCep,
+            addressNumber
         });
     }
     

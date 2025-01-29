@@ -16,18 +16,18 @@ export class AddressServiceImplementation implements AddressService {
   public async create(
     addressStreet: string,
     addressDistrict: string,
-    addressNumber: string,
     addressCity: string,
     addressState: string,
-    addressCep: string
+    addressCep: string,
+    addressNumber: string
   ): Promise<CreateOutputDto> {
     const aAddress = Address.create(
       addressStreet,
-      addressNumber,
-      addressCity,
       addressDistrict,
+      addressCity,
       addressState,
-      addressCep
+      addressCep,
+      addressNumber
     );
 
     await this.repository.save(aAddress);
@@ -40,7 +40,6 @@ export class AddressServiceImplementation implements AddressService {
   }
 
   public async find(addressId: string): Promise<FindOutPutDto> {
-
     const aAddress = await this.repository.find(addressId);
 
     if (!aAddress) {
@@ -64,19 +63,19 @@ export class AddressServiceImplementation implements AddressService {
     addressId: string,
     addressStreet: string,
     addressDistrict: string,
-    addressNumber: string,
     addressCity: string,
     addressState: string,
-    addressCep: string
+    addressCep: string,
+    addressNumber: string
   ): Promise<void> {
     const aAddress = Address.with(
       addressId,
       addressStreet,
-      addressNumber,
-      addressCity,
       addressDistrict,
+      addressCity,
       addressState,
-      addressCep
+      addressCep,
+      addressNumber
     );
 
     await this.repository.update(aAddress);
