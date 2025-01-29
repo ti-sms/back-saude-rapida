@@ -11,10 +11,10 @@ model address {
   addressId       String          @id @unique(map: "addressId_UNIQUE") @db.VarChar(60)
   addressStreet   String?         @db.VarChar(60)
   addressDistrict String?         @db.VarChar(45)
-  addressNumber   String?         @db.VarChar(10)
   addressCity     String?         @db.VarChar(45)
   addressState    String?         @default("CE") @db.VarChar(45)
   addressCep      String?         @db.VarChar(45)
+  addressNumber   String?         @db.VarChar(10)
   generalconfig   generalconfig[]
   hospital        hospital[]
   local           local[]

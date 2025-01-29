@@ -40,6 +40,7 @@ export class AddressServiceImplementation implements AddressService {
   }
 
   public async find(addressId: string): Promise<FindOutPutDto> {
+
     const aAddress = await this.repository.find(addressId);
 
     if (!aAddress) {

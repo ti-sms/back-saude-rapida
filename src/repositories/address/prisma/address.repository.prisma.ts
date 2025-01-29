@@ -43,6 +43,7 @@ export class AddressRepositoryPrisma implements AddressRepository {
   }
 
   public async find(addressId: string): Promise<Address | null> {
+    console.log("find");
     const aAddress = await this.prisma.address.findUnique({
       where: { addressId },
     });
