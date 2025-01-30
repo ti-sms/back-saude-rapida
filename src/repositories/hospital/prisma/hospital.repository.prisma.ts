@@ -14,7 +14,7 @@ export class HospitalRepositoryPrisma implements HospitalRepository {
       hospitalId: hospital.id,
       hospitalName: hospital.name,
       hospitalDescription: hospital.description,
-      address_addressId: hospital.address_addressId.addressId,
+      address_addressId: hospital.address_addressId as string ,
     };
 
     await this.prisma.hospital.create({
@@ -27,7 +27,7 @@ export class HospitalRepositoryPrisma implements HospitalRepository {
       hospitalId: hospital.id,
       hospitalName: hospital.name,
       hospitalDescription: hospital.description,
-      address_addressId: hospital.address_addressId.addressId,
+      address_addressId: hospital.address_addressId as string,
     };
 
     await this.prisma.hospital.update({

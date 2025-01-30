@@ -1,19 +1,19 @@
 import { ApiExpress } from "./api/express/api.express";
 import { AddressController } from "./api/express/controllers/address/address.controller";
+import { HospitalControler } from "./api/express/controllers/hospital/hospital.controller";
 
  function main(){
     const api = ApiExpress.build();
 
     const controllerAddress = AddressController.build();
+    const controllerHospital = HospitalControler.build();
 
     // Endpoint de endereços
     api.addPostRoute("/address/create", controllerAddress.create);
     api.addGetRoute("/address/:id", controllerAddress.find);
     api.addUpdateRoute("/address/update/:id", controllerAddress.update);
 
-
-    // Endpoint de hospitais
-    api.addPostRoute("/hospital/create", controller.create);
+    api.addPostRoute("/hospital/create", controllerHospital.create);
 
     api.start(8000);
 }

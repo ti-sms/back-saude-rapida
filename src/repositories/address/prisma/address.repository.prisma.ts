@@ -9,7 +9,7 @@ export class AddressRepositoryPrisma implements AddressRepository {
     return new AddressRepositoryPrisma(prisma);
   }
 
-  public async save(address: Address): Promise<void> {
+  public async save(address: Address): Promise<string> {
     const data = {
       addressId: address.id,
       addressStreet: address.street,
@@ -20,7 +20,8 @@ export class AddressRepositoryPrisma implements AddressRepository {
       addressNumber: address.number
     };
 
-    await this.prisma.address.create({ data });
+    const response = await this.prisma.address.create({ data });
+    return response.addressId;
   }
 
   public async update(address: Address): Promise<void> {

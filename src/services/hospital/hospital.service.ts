@@ -1,8 +1,10 @@
+import { AddressProps } from "../../entities/address/address";
+
 export type FindOutPutDto = {
   id: string;
   name: string;
   description: string;
-  hospitalAddressId: string;
+  hospitalAddressId: AddressProps;
 };
 
 export type CreateOutputDto = {
@@ -12,10 +14,9 @@ export type CreateOutputDto = {
 export interface HospitalService {
   find(id: string): Promise<FindOutPutDto>;
   create(
-    id: string,
     name: string,
     description: string,
-    hospitalAddressId: string
+    hospitalAddressId: AddressProps
   ): Promise<CreateOutputDto>;
   update(
     id: string,

@@ -4,7 +4,7 @@ export type HospitalProps = {
   hospitalId: string;
   hospitalName: string;
   hospitalDescription: string | null;
-  address_addressId: AddressProps;
+  address_addressId: AddressProps | string;
 };
 
 export class Hospital {
@@ -13,7 +13,7 @@ export class Hospital {
   public static create(
     hospitalName: string,
     hospitalDescription: string,
-    address_addressId: AddressProps
+    address_addressId: string
   ) {
     return new Hospital({
       hospitalId: crypto.randomUUID().toString(),
@@ -27,7 +27,7 @@ export class Hospital {
     hospitalId: string,
     hospitalName: string,
     hospitalDescription: string,
-    address_addressId: AddressProps
+    address_addressId: AddressProps | string
   ) {
     return new Hospital({
       hospitalId,
