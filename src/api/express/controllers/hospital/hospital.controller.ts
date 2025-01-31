@@ -12,7 +12,7 @@ export class HospitalControler {
     }
 
     public async create(request: Request, response: Response) {
-        const {name, description, address} = request.body;
+        const {name, description, addressSchema} = request.body;
 
         const hospitalRepository = HospitalRepositoryPrisma.build(prisma);
         const addressRepository = AddressRepositoryPrisma.build(prisma);
@@ -21,7 +21,7 @@ export class HospitalControler {
         const output = await hService.create(
             name,
             description,
-            address
+            addressSchema
         );
 
         const data = {

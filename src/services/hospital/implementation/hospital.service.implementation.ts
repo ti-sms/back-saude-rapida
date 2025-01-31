@@ -27,7 +27,7 @@ export class HospitalServiceImplementation implements HospitalService {
     address_addressId: AddressProps
   ): Promise<CreateOutputDto> {
     const aAddress = Address.create(
-      address_addressId.addressState ?? "",
+      address_addressId.addressStreet ?? "",
       address_addressId.addressDistrict ?? "",
       address_addressId.addressCity ?? "",
       address_addressId.addressState ?? "",
