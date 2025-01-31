@@ -2,7 +2,7 @@ import { ApiExpress } from "./api/express/api.express";
 import { AddressController } from "./api/express/controllers/address/address.controller";
 import { HospitalControler } from "./api/express/controllers/hospital/hospital.controller";
 import { validateCreateHospital } from "./middlewares/hospital/hospital.create.midleware";
-import { hospitalValidationRules } from "./validators/hospital/hospital.params.validators";
+import { hospitalValidationCreateRules, hospitalValidationUpdateRules } from "./validators/hospital/hospital.params.validators";
 
  function main(){
     const api = ApiExpress.build();
@@ -15,7 +15,8 @@ import { hospitalValidationRules } from "./validators/hospital/hospital.params.v
     api.addGetRoute("/address/:id", controllerAddress.find);
     api.addUpdateRoute("/address/update/:id", controllerAddress.update);
 
-    api.addPostRoute("/hospital/create", controllerHospital.create, [hospitalValidationRules(), validateCreateHospital]);
+    api.addPostRoute("/hospital/create", controllerHospital.create, [hospitalValidationCreateRules(), validateCreateHospital]);
+    api.addUpdateRoute("/hospital/update/:id", controllerHospital.update, [hospitalValidationUpdateRules(), validateCreateHospital]);
    // api.addPostRoute("/hospital/create", controllerHospital.create, [authenticateToken, userIdValidationRules(), validate]);
 
     api.start(8000);

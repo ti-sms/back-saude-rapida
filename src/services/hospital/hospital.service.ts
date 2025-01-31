@@ -22,6 +22,6 @@ export interface HospitalService {
     id: string,
     name: string,
     description: string,
-    hospitalAddressId: string
+    hospitalAddressId: AddressProps
   ): Promise<void>;
 }

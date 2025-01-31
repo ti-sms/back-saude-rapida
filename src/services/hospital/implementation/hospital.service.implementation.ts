@@ -24,15 +24,15 @@ export class HospitalServiceImplementation implements HospitalService {
   public async create(
     hospitalName: string,
     hospitalDescription: string,
-    address_addressId: AddressProps
+    hospitalAddressId: AddressProps
   ): Promise<CreateOutputDto> {
     const aAddress = Address.create(
-      address_addressId.addressStreet ?? "",
-      address_addressId.addressDistrict ?? "",
-      address_addressId.addressCity ?? "",
-      address_addressId.addressState ?? "",
-      address_addressId.addressCep ?? "",
-      address_addressId.addressNumber ?? ""
+      hospitalAddressId.addressStreet ?? "",
+      hospitalAddressId.addressDistrict ?? "",
+      hospitalAddressId.addressCity ?? "",
+      hospitalAddressId.addressState ?? "",
+      hospitalAddressId.addressCep ?? "",
+      hospitalAddressId.addressNumber ?? ""
     );
 
     const idAddress = await this.repositoryAddress.save(aAddress);
@@ -73,15 +73,27 @@ export class HospitalServiceImplementation implements HospitalService {
     hospitalId: string,
     hospitalName: string,
     hospitalDescription: string,
-    address_addressId: string
+    hospitalAddressId: AddressProps
   ): Promise<void> {
-    const aAddress = Hospital.with(
+    const aAddress = Address.with(
+      hospitalAddressId.addressId,
+      hospitalAddressId.addressStreet,
+      hospitalAddressId.addressDistrict,
+      hospitalAddressId.addressCity,
+      hospitalAddressId.addressState,
+      hospitalAddressId.addressCep,
+      hospitalAddressId.addressNumber
+    );
+
+    await this.repositoryAddress.update(aAddress);
+
+    const aHospital = Hospital.with(
       hospitalId,
       hospitalName,
       hospitalDescription,
-      address_addressId
+      hospitalAddressId.addressId
     );
 
-    await this.repository.update(aAddress);
+    await this.repository.update(aHospital);
   }
 }
