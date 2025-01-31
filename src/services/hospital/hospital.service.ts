@@ -7,12 +7,20 @@ export type FindOutPutDto = {
   hospitalAddressId: AddressProps;
 };
 
+export type ListOutPutDto = {
+  id: string;
+  name: string;
+  description: string | null;
+  hospitalAddressId: string;
+}[];
+
 export type CreateOutputDto = {
   id: string;
 };
 
 export interface HospitalService {
   find(id: string): Promise<FindOutPutDto>;
+  list(): Promise<ListOutPutDto[]>;
   create(
     name: string,
     description: string,

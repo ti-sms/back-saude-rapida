@@ -58,4 +58,15 @@ export class HospitalRepositoryPrisma implements HospitalRepository {
 
     return address;
   }
+
+  public async list(): Promise<Hospital[]> {
+    const aHospital = await this.prisma.hospital.findMany();
+
+    const products: Hospital[] = aHospital.map((h) => {
+        const { hospitalId, hospitalName, hospitalDescription, address_addressId } = h;
+        return Hospital.with(hospitalId, hospitalName ?? "", hospitalDescription ?? "", address_addressId);
+    });
+
+    return products;
+}
 }

@@ -6,6 +6,7 @@ import {
   CreateOutputDto,
   FindOutPutDto,
   HospitalService,
+  ListOutPutDto,
 } from "../hospital.service";
 
 export class HospitalServiceImplementation implements HospitalService {
@@ -51,6 +52,25 @@ export class HospitalServiceImplementation implements HospitalService {
 
     return output;
   }
+
+  public async list(): Promise<ListOutPutDto[]> {
+    const aHospital = await this.repository.list();
+
+    const hospital = aHospital.map((h) => {
+        return {
+            id: h.id,
+            name: h.name,
+            description: h.description,
+            address_addressId: h.address_addressId,
+        };
+    });
+
+    const output: ListOutPutDto[] = 
+      hospital
+    ;
+
+    return output;
+}
 
   public async find(hospitalId: string): Promise<FindOutPutDto> {
     const aHospital = await this.repository.find(hospitalId);

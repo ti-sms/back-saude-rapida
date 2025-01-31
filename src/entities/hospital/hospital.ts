@@ -52,4 +52,5 @@ export class Hospital {
   public get address_addressId() {
     return this.props.address_addressId;
   }
+
 }

@@ -11,6 +11,56 @@ export class HospitalControler {
     return new HospitalControler();
   }
 
+  public async list(request: Request, response: Response) {
+    const hospitalRepository = HospitalRepositoryPrisma.build(prisma);
+    const addressRepository = AddressRepositoryPrisma.build(prisma);
+    const hService = HospitalServiceImplementation.build(
+      hospitalRepository,
+      addressRepository
+    );
+
+    const output = await hService.list();
+
+    const data = {
+        output
+    };
+
+    response.status(200).json(data).send();
+}
+
+  public async find(request: Request, response: Response) {
+    try {
+      const { id } = request.params;
+
+      const hospitalRepository = HospitalRepositoryPrisma.build(prisma);
+      const addressRepository = AddressRepositoryPrisma.build(prisma);
+      const hService = HospitalServiceImplementation.build(
+        hospitalRepository,
+        addressRepository
+      );
+
+      const output = await hService.find(id);
+
+      const data = {
+        name: output.name,
+        description: output.description,
+        addressSchema: {
+          addressId: output.hospitalAddressId.addressId,
+          addressStreet: output.hospitalAddressId.addressStreet,
+          addressDistrict: output.hospitalAddressId.addressDistrict,
+          addressState: output.hospitalAddressId.addressState,
+          addressCity: output.hospitalAddressId.addressCity,
+          addressNumber: output.hospitalAddressId.addressNumber,
+          addressCep: output.hospitalAddressId.addressCep,
+        }
+    };
+
+      response.status(201).json(data).send();
+    } catch (error) {
+      response.status(404).json({ message: "Hospital não encontrado" }).send();
+    }
+  }
+
   public async create(request: Request, response: Response) {
     try {
       const { name, description, addressSchema } = request.body;

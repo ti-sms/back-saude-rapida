@@ -28,3 +28,9 @@ export const hospitalValidationUpdateRules = () => {
     body("addressSchema.addressNumber").isLength({ min: 1, max: 10}).withMessage("Número do endereço deve ter entre 1 à 10 caracteres.")
   ];
 };
+
+export const hospitalValidationFindRules = () => {
+  return [
+    param("id").exists().isLength({ min: 36 }).withMessage("O Id do hospital obrigatório")
+  ];
+};
