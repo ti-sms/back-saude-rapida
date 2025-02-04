@@ -11,10 +11,10 @@ model address {
   addressId       String          @id @unique(map: "addressId_UNIQUE") @db.VarChar(60)
   addressStreet   String?         @db.VarChar(60)
   addressDistrict String?         @db.VarChar(45)
+  addressNumber   String?         @db.VarChar(10)
   addressCity     String?         @db.VarChar(45)
   addressState    String?         @default("CE") @db.VarChar(45)
   addressCep      String?         @db.VarChar(45)
-  addressNumber   String?         @db.VarChar(10)
   generalconfig   generalconfig[]
   hospital        hospital[]
   local           local[]
@@ -24,6 +24,7 @@ model address {
 model car {
   carId           String     @id @unique(map: "carId_UNIQUE") @db.VarChar(60)
   carName         String     @db.VarChar(100)
+  carStatus       String     @db.VarChar(45)
   carPlate        String     @db.VarChar(15)
   carModel        String     @db.VarChar(100)
   carType         String     @db.VarChar(45)
@@ -48,7 +49,8 @@ model generalconfig {
 
 model hospital {
   hospitalId          String            @unique(map: "hospitalId_UNIQUE") @db.VarChar(60)
-  hospitalName        String?           @db.VarChar(45)
+  hospitalName        String            @db.VarChar(45)
+  hospitalStatus      Int               @default(1) @db.TinyInt
   hospitalDescription String?           @db.LongText
   address_addressId   String            @db.VarChar(60)
   address             address           @relation(fields: [address_addressId], references: [addressId], onDelete: NoAction, onUpdate: NoAction, map: "fk_hospital_address1")
@@ -61,6 +63,7 @@ model hospital {
 model local {
   localId           String     @unique(map: "localId_UNIQUE") @db.VarChar(60)
   localName         String?    @db.VarChar(45)
+  localStatus       Int        @default(1) @db.TinyInt
   address_addressId String     @db.VarChar(60)
   address           address    @relation(fields: [address_addressId], references: [addressId], onDelete: NoAction, onUpdate: NoAction, map: "fk_local_address1")
   location          location[]
@@ -73,6 +76,7 @@ model location {
   locationId                        String         @unique(map: "locationId_UNIQUE") @db.VarChar(60)
   locationDateTimeInitial           String         @db.VarChar(45)
   locationDateTimeFinal             String?        @db.VarChar(45)
+  locationStatus                    Int?           @default(1) @db.TinyInt
   locationObservations              String?        @db.LongText
   userPermission_driverPermissionId String         @db.VarChar(60)
   car_carId                         String         @db.VarChar(60)

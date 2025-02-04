@@ -24,7 +24,7 @@ export class HospitalControler {
     const data = output;
 
     response.status(200).json(data).send();
-}
+  }
 
   public async find(request: Request, response: Response) {
     try {
@@ -50,8 +50,8 @@ export class HospitalControler {
           addressCity: output.hospitalAddressId.addressCity,
           addressNumber: output.hospitalAddressId.addressNumber,
           addressCep: output.hospitalAddressId.addressCep,
-        }
-    };
+        },
+      };
 
       response.status(201).json(data).send();
     } catch (error) {
@@ -61,7 +61,7 @@ export class HospitalControler {
 
   public async create(request: Request, response: Response) {
     try {
-      const { name, description, addressSchema } = request.body;
+      const { name, status, description, addressSchema } = request.body;
 
       const hospitalRepository = HospitalRepositoryPrisma.build(prisma);
       const addressRepository = AddressRepositoryPrisma.build(prisma);
@@ -70,7 +70,7 @@ export class HospitalControler {
         addressRepository
       );
 
-      const output = await hService.create(name, description, addressSchema);
+      const output = await hService.create(name, status, description, addressSchema);
 
       const data = output;
       response.status(201).json(data).send();
@@ -86,7 +86,7 @@ export class HospitalControler {
 
   public async update(request: Request, response: Response) {
     try {
-      const { name, description, addressSchema } = request.body;
+      const { name, status, description, addressSchema } = request.body;
       const { id } = request.params;
 
       const hospitalRepository = HospitalRepositoryPrisma.build(prisma);
@@ -99,6 +99,7 @@ export class HospitalControler {
       const output = await hService.update(
         id,
         name,
+        status,
         description,
         addressSchema
       );
@@ -108,6 +109,7 @@ export class HospitalControler {
       };
       response.status(201).json(data).send();
     } catch (error) {
+      console.log(error);
       response
         .status(500)
         .json({
@@ -116,4 +118,6 @@ export class HospitalControler {
         .send();
     }
   }
+
+  
 }

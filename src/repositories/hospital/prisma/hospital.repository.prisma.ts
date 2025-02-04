@@ -26,6 +26,7 @@ export class HospitalRepositoryPrisma implements HospitalRepository {
     const data = {
       hospitalId: hospital.id,
       hospitalName: hospital.name,
+      hospitalStatus: hospital.status,
       hospitalDescription: hospital.description,
       address_addressId: hospital.address_addressId as string,
     };
@@ -48,11 +49,12 @@ export class HospitalRepositoryPrisma implements HospitalRepository {
       return null;
     }
 
-    const { hospitalName, hospitalDescription } = aHospital;
+    const { hospitalName, hospitalStatus, hospitalDescription } = aHospital;
 
     const address = Hospital.with(
       hospitalId,
       hospitalName ?? "",
+      hospitalStatus,
       hospitalDescription ?? "",
       aHospital.address
     );
@@ -65,16 +67,17 @@ export class HospitalRepositoryPrisma implements HospitalRepository {
       include: { address: true },
     });
 
-    const products: Hospital[] = aHospital.map((h) => {
-      const { hospitalId, hospitalName, hospitalDescription, address } = h;
+    const hospital: Hospital[] = aHospital.map((h) => {
+      const { hospitalId, hospitalName, hospitalStatus, hospitalDescription, address } = h;
       return Hospital.with(
         hospitalId,
         hospitalName ?? "",
+        hospitalStatus,
         hospitalDescription ?? "",
         address
       );
     });
 
-    return products;
+    return hospital;
   }
 }

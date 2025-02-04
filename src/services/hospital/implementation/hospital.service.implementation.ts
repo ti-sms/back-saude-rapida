@@ -24,6 +24,7 @@ export class HospitalServiceImplementation implements HospitalService {
 
   public async create(
     hospitalName: string,
+    hospitalStatus: number,
     hospitalDescription: string,
     hospitalAddressId: AddressProps
   ): Promise<CreateOutputDto> {
@@ -40,6 +41,7 @@ export class HospitalServiceImplementation implements HospitalService {
 
     const aHospital = Hospital.create(
       hospitalName,
+      hospitalStatus,
       hospitalDescription,
       idAddress
     );
@@ -60,6 +62,7 @@ export class HospitalServiceImplementation implements HospitalService {
         return {
             id: h.id,
             name: h.name,
+            status: h.status,
             description: h.description,
             hospitalAddressId: h.address_addressId,
         };
@@ -82,6 +85,7 @@ export class HospitalServiceImplementation implements HospitalService {
     const output: FindOutPutDto = {
       id: aHospital.id,
       name: aHospital.name,
+      status: aHospital.status,
       description: aHospital.description ?? "",
       hospitalAddressId: aHospital.address_addressId as AddressProps,
     };
@@ -92,9 +96,16 @@ export class HospitalServiceImplementation implements HospitalService {
   public async update(
     hospitalId: string,
     hospitalName: string,
+    hospitalStatus: number,
     hospitalDescription: string,
     hospitalAddressId: AddressProps
   ): Promise<void> {
+
+    console.log(hospitalAddressId);
+    console.log(hospitalId);
+    console.log(hospitalName);
+    console.log(hospitalStatus);
+    console.log(hospitalDescription);
     const aAddress = Address.with(
       hospitalAddressId.addressId,
       hospitalAddressId.addressStreet,
@@ -110,6 +121,7 @@ export class HospitalServiceImplementation implements HospitalService {
     const aHospital = Hospital.with(
       hospitalId,
       hospitalName,
+      hospitalStatus,
       hospitalDescription,
       hospitalAddressId.addressId
     );

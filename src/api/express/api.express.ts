@@ -34,6 +34,15 @@ export class ApiExpress implements Api {
     this.app.put(path,...middlewares, handler);
   }
 
+  public addPatchRoute(
+    path: string,
+    handler: (req: Request, res: Response) => void,
+    middlewares: any[] = []
+  ): void {
+    this.app.patch(path,...middlewares, handler);
+  }
+
+
   public start(port: number) {
     this.app.listen(port, () => {
       console.log("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀");

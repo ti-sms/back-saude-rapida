@@ -3,6 +3,7 @@ import { AddressProps } from "../../entities/address/address";
 export type FindOutPutDto = {
   id: string;
   name: string;
+  status: number;
   description: string;
   hospitalAddressId: AddressProps;
 };
@@ -10,6 +11,7 @@ export type FindOutPutDto = {
 export type ListOutPutDto = {
   id: string;
   name: string;
+  status: number;
   description: string | null;
   hospitalAddressId: string | AddressProps;
 };
@@ -23,12 +25,14 @@ export interface HospitalService {
   list(): Promise<ListOutPutDto[]>;
   create(
     name: string,
+    status: number,
     description: string,
     hospitalAddressId: AddressProps
   ): Promise<CreateOutputDto>;
   update(
     id: string,
     name: string,
+    status: number,
     description: string,
     hospitalAddressId: AddressProps
   ): Promise<void>;
