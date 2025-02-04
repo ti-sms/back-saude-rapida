@@ -70,7 +70,12 @@ export class HospitalControler {
         addressRepository
       );
 
-      const output = await hService.create(name, status, description, addressSchema);
+      const output = await hService.create(
+        name,
+        status,
+        description,
+        addressSchema
+      );
 
       const data = output;
       response.status(201).json(data).send();
@@ -109,7 +114,6 @@ export class HospitalControler {
       };
       response.status(201).json(data).send();
     } catch (error) {
-      console.log(error);
       response
         .status(500)
         .json({
@@ -119,5 +123,27 @@ export class HospitalControler {
     }
   }
 
-  
+  public async patch(request: Request, response: Response) {
+    try {
+      const { status } = request.body;
+      const { id } = request.params;
+      const hospitalRepository = HospitalRepositoryPrisma.build(prisma);
+      const addressRepository = AddressRepositoryPrisma.build(prisma);
+      const hService = HospitalServiceImplementation.build(
+        hospitalRepository,
+        addressRepository
+      );
+
+      await hService.patch(id, status);
+
+      response.status(201).json().send();
+    } catch (error) {
+      response
+        .status(500)
+        .json({
+          message: "Erro ao desativar hospital",
+        })
+        .send();
+    }
+  }
 }

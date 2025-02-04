@@ -39,6 +39,15 @@ export class HospitalRepositoryPrisma implements HospitalRepository {
     });
   }
 
+  public async patch(id: string, status: number): Promise<void> {
+    await this.prisma.hospital.update({
+      where: {
+        hospitalId: id,
+      },
+      data: { hospitalStatus: status },
+    });
+  }
+
   public async find(hospitalId: string): Promise<Hospital | null> {
     const aHospital = await this.prisma.hospital.findUnique({
       where: { hospitalId: hospitalId },
@@ -68,7 +77,13 @@ export class HospitalRepositoryPrisma implements HospitalRepository {
     });
 
     const hospital: Hospital[] = aHospital.map((h) => {
-      const { hospitalId, hospitalName, hospitalStatus, hospitalDescription, address } = h;
+      const {
+        hospitalId,
+        hospitalName,
+        hospitalStatus,
+        hospitalDescription,
+        address,
+      } = h;
       return Hospital.with(
         hospitalId,
         hospitalName ?? "",

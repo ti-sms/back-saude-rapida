@@ -59,21 +59,18 @@ export class HospitalServiceImplementation implements HospitalService {
     const aHospital = await this.repository.list();
 
     const hospital = aHospital.map((h) => {
-        return {
-            id: h.id,
-            name: h.name,
-            status: h.status,
-            description: h.description,
-            hospitalAddressId: h.address_addressId,
-        };
+      return {
+        id: h.id,
+        name: h.name,
+        status: h.status,
+        description: h.description,
+        hospitalAddressId: h.address_addressId,
+      };
     });
 
-    const output: ListOutPutDto[] = 
-      hospital
-    ;
-
+    const output: ListOutPutDto[] = hospital;
     return output;
-}
+  }
 
   public async find(hospitalId: string): Promise<FindOutPutDto> {
     const aHospital = await this.repository.find(hospitalId);
@@ -100,12 +97,6 @@ export class HospitalServiceImplementation implements HospitalService {
     hospitalDescription: string,
     hospitalAddressId: AddressProps
   ): Promise<void> {
-
-    console.log(hospitalAddressId);
-    console.log(hospitalId);
-    console.log(hospitalName);
-    console.log(hospitalStatus);
-    console.log(hospitalDescription);
     const aAddress = Address.with(
       hospitalAddressId.addressId,
       hospitalAddressId.addressStreet,
@@ -127,5 +118,12 @@ export class HospitalServiceImplementation implements HospitalService {
     );
 
     await this.repository.update(aHospital);
+  }
+
+  public async patch(
+    hospitalId: string,
+    hospitalStatus: number
+  ): Promise<void> {
+    await this.repository.patch(hospitalId, hospitalStatus);
   }
 }
