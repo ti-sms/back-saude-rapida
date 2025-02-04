@@ -11,8 +11,8 @@ export type ListOutPutDto = {
   id: string;
   name: string;
   description: string | null;
-  hospitalAddressId: string;
-}[];
+  hospitalAddressId: string | AddressProps;
+};
 
 export type CreateOutputDto = {
   id: string;

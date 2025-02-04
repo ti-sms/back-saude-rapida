@@ -12,8 +12,8 @@ export class Hospital {
 
   public static create(
     hospitalName: string,
-    hospitalDescription: string,
-    address_addressId: string
+    hospitalDescription: string | null,
+    address_addressId: string | AddressProps
   ) {
     return new Hospital({
       hospitalId: crypto.randomUUID().toString(),
@@ -26,7 +26,7 @@ export class Hospital {
   public static with(
     hospitalId: string,
     hospitalName: string,
-    hospitalDescription: string,
+    hospitalDescription: string | null,
     address_addressId: AddressProps | string
   ) {
     return new Hospital({

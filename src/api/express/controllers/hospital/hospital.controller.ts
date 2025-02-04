@@ -21,9 +21,7 @@ export class HospitalControler {
 
     const output = await hService.list();
 
-    const data = {
-        output
-    };
+    const data = output;
 
     response.status(200).json(data).send();
 }
@@ -74,9 +72,7 @@ export class HospitalControler {
 
       const output = await hService.create(name, description, addressSchema);
 
-      const data = {
-        id: output,
-      };
+      const data = output;
       response.status(201).json(data).send();
     } catch (error) {
       response

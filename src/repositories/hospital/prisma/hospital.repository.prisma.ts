@@ -14,7 +14,7 @@ export class HospitalRepositoryPrisma implements HospitalRepository {
       hospitalId: hospital.id,
       hospitalName: hospital.name,
       hospitalDescription: hospital.description,
-      address_addressId: hospital.address_addressId as string ,
+      address_addressId: hospital.address_addressId as string,
     };
 
     await this.prisma.hospital.create({
@@ -41,32 +41,40 @@ export class HospitalRepositoryPrisma implements HospitalRepository {
   public async find(hospitalId: string): Promise<Hospital | null> {
     const aHospital = await this.prisma.hospital.findUnique({
       where: { hospitalId: hospitalId },
-      include: {address: true }
+      include: { address: true },
     });
 
     if (!aHospital) {
       return null;
     }
 
-    const {hospitalName, hospitalDescription } = aHospital;
+    const { hospitalName, hospitalDescription } = aHospital;
 
     const address = Hospital.with(
-       hospitalId, 
-       hospitalName ?? "", 
-       hospitalDescription ?? "", 
-       aHospital.address);
+      hospitalId,
+      hospitalName ?? "",
+      hospitalDescription ?? "",
+      aHospital.address
+    );
 
     return address;
   }
 
   public async list(): Promise<Hospital[]> {
-    const aHospital = await this.prisma.hospital.findMany();
+    const aHospital = await this.prisma.hospital.findMany({
+      include: { address: true },
+    });
 
     const products: Hospital[] = aHospital.map((h) => {
-        const { hospitalId, hospitalName, hospitalDescription, address_addressId } = h;
-        return Hospital.with(hospitalId, hospitalName ?? "", hospitalDescription ?? "", address_addressId);
+      const { hospitalId, hospitalName, hospitalDescription, address } = h;
+      return Hospital.with(
+        hospitalId,
+        hospitalName ?? "",
+        hospitalDescription ?? "",
+        address
+      );
     });
 
     return products;
-}
+  }
 }

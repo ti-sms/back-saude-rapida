@@ -17,8 +17,9 @@ import { hospitalValidationCreateRules, hospitalValidationFindRules, hospitalVal
 
     // Endpoint de hospital
     api.addPostRoute("/hospital/create", controllerHospital.create, [hospitalValidationCreateRules(), validateCreateHospital]);
+    api.addGetRoute("/hospital/list", controllerHospital.list);
     api.addGetRoute("/hospital/:id", controllerHospital.find, [hospitalValidationFindRules(), validateCreateHospital]);
-    api.addUpdateRoute("/hospital/update/:id", controllerHospital.update, [hospitalValidationUpdateRules(), validateCreateHospital]);
+    api.addUpdateRoute("/hospital/update/:id", controllerHospital.update, [hospitalValidationUpdateRules()]);
    // api.addPostRoute("/hospital/create", controllerHospital.create, [authenticateToken, userIdValidationRules(), validate]);
 
     api.start(8000);

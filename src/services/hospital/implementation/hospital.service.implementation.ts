@@ -61,7 +61,7 @@ export class HospitalServiceImplementation implements HospitalService {
             id: h.id,
             name: h.name,
             description: h.description,
-            address_addressId: h.address_addressId,
+            hospitalAddressId: h.address_addressId,
         };
     });
 
