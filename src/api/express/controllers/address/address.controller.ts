@@ -1,7 +1,9 @@
 import { Request, Response } from "express";
 import { AddressRepositoryPrisma } from "../../../../repositories/address/prisma/address.repository.prisma";
-import { prisma } from "../../../../util/prisma.util";
+
 import { AddressServiceImplementation } from "../../../../services/address/implementation/address.service.implementation";
+import { prisma } from "../../../../util/prisma.util";
+import encryptResponseMiddleware from "../../../../util/encrypt";
 
 export class AddressController {
   private constructor() {}
@@ -28,7 +30,7 @@ export class AddressController {
         number: output.number,
       };
 
-      response.status(201).json(data).send();
+      response.status(201).json(encryptResponseMiddleware(data)).send();
     } catch (error) {
       response.status(404).json({ message: "Endereço não encontrado" }).send();
     }
@@ -53,7 +55,7 @@ export class AddressController {
       id: output.id,
     };
 
-    response.status(201).json(data).send();
+    response.status(201).json(encryptResponseMiddleware(data)).send();
   }
 
   public async update(request: Request, response: Response) {
