@@ -12,6 +12,16 @@ export type CreateOutputDto = {
   id: string;
 };
 
+export type ListFindOutPutDto = {
+  id: string;
+  street: string;
+  district: string;
+  number: string;
+  city: string;
+  state: string;
+  cep: string;
+};
+
 export interface AddressService {
   find(id: string): Promise<FindOutPutDto>;
   create(
@@ -19,7 +29,7 @@ export interface AddressService {
     street: string,
     district: string,
     number: string,
-    city: string, 
+    city: string,
     state: string,
     cep: string
   ): Promise<CreateOutputDto>;
@@ -32,4 +42,5 @@ export interface AddressService {
     state: string,
     cep: string
   ): Promise<void>;
+  searchMultipleId(listId: string[]): Promise<ListFindOutPutDto[]>;
 }

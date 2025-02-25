@@ -6,21 +6,9 @@ const secretKey = config.jwtSecret; // Substitua pela sua chave secreta
 
 // Middleware para criptografar respostas
 function encryptResponseMiddleware(res: any) {
-  const teste = {
-    name: "João da Silva",
-    cpf: "082.654.854-82",
-    cns: "",
-    phone: "85989958252",
-    addressSchema: {
-        addressCep: "62700-00",
-        addressState: "ce",
-        addressCity: "canindé",
-        addressStreet: "rua rua rua",
-        addressDistrict: "Santa Luzia",
-        addressNumber: "6240"
-    }
-  };
-  const jsonString = JSON.stringify(teste);
+
+  const jsonString = JSON.stringify(res);
+
   return CryptoJS.AES.encrypt(jsonString, secretKey).toString();
 }
 

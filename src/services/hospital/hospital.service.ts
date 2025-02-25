@@ -30,8 +30,10 @@ export interface HospitalService {
     address: AddressProps
   ): Promise<CreateOutputDto>;
   update(
+    id: string,
     name: string,
     status: number,
-    description: string
+    description: string,
+    address: string
   ): Promise<void>;
 }

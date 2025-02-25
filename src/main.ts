@@ -2,7 +2,7 @@ import { ApiExpress } from "./api/express/api.express";
 import { AddressController } from "./api/express/controllers/address/address.controller";
 import { LoginController } from "./api/express/controllers/authentication/authetication.controller";
 import { DepartmentController } from "./api/express/controllers/department/department.controller";
-import { DocumentController } from "./api/express/controllers/document/document.controller";
+import { HospitalController } from "./api/express/controllers/hospital/hospital.controller";
 import { PersonController } from "./api/express/controllers/person/person.controller";
 import { SecretaryController } from "./api/express/controllers/secretary/secretary.controller";
 import { UserController } from "./api/express/controllers/user/user.controller";
@@ -23,6 +23,7 @@ import {
 function main() {
   const api = ApiExpress.build();
 
+  // Controladores => Saúde core
   const controllerAddress = AddressController.build();
   const controllerSecretary = SecretaryController.build();
   const controllerDepartment = DepartmentController.build();
@@ -30,7 +31,22 @@ function main() {
   const controllerUserPermission = UserPermissionController.build();
   const controllerPerson = PersonController.build();
   const controllerLogin = LoginController.build();
-  const controllerDocument = DocumentController.build();
+
+  // Controladores => Saúde rápida
+  const controllerHospital = HospitalController.build();
+
+  //Endpoints do saúde rápida----------------------------------------------------------------------------------------------------
+
+  api.addPostRoute("/hospital/create", controllerHospital.create, [
+    decryptDataMiddleware,
+  ]);
+  api.addGetRoute("/hospital/list", controllerHospital.list);
+  api.addGetRoute("/hospital/:id", controllerHospital.find);
+  api.addUpdateRoute("/hospital/update/:id", controllerHospital.update, [
+    decryptDataMiddleware,
+  ]);  
+
+  //Endpoints do saúde core----------------------------------------------------------------------------------------------------
 
   // Endpoint de endereço
   api.addPostRoute("/address/create", controllerAddress.create);
@@ -92,7 +108,7 @@ function main() {
     validateUser,
   ]);
 
-  api.start(8001);
+  api.start(8000);
 }
 
 main();

@@ -17,7 +17,7 @@ export class AddressRepositoryPrisma implements AddressRepository {
       addressCity: address.city,
       addressState: address.state,
       addressCep: address.cep,
-      addressNumber: address.number
+      addressNumber: address.number,
     };
 
     const response = await this.prisma.address.create({ data });
@@ -25,7 +25,6 @@ export class AddressRepositoryPrisma implements AddressRepository {
   }
 
   public async update(address: Address): Promise<void> {
-
     const data = {
       addressId: address.id,
       addressStreet: address.street,
@@ -33,7 +32,7 @@ export class AddressRepositoryPrisma implements AddressRepository {
       addressCity: address.city,
       addressState: address.state,
       addressCep: address.cep,
-      addressNumber: address.number
+      addressNumber: address.number,
     };
 
     await this.prisma.address.update({
@@ -45,7 +44,6 @@ export class AddressRepositoryPrisma implements AddressRepository {
   }
 
   public async find(addressId: string): Promise<Address | null> {
-
     const aAddress = await this.prisma.address.findUnique({
       where: { addressId },
     });
@@ -60,10 +58,10 @@ export class AddressRepositoryPrisma implements AddressRepository {
       addressCity,
       addressState,
       addressCep,
-      addressNumber
+      addressNumber,
     } = aAddress;
 
-    const address = Address.with( 
+    const address = Address.with(
       addressId,
       addressStreet,
       addressDistrict,
@@ -74,5 +72,42 @@ export class AddressRepositoryPrisma implements AddressRepository {
     );
 
     return address;
-}
+  }
+
+  public async findManyByIds(id: string[]): Promise<Address[]> {
+    const aAddress = await this.prisma.address.findMany({
+      where: {
+        addressId: {
+          in: id,
+        },
+      },
+    });
+    if (!aAddress) {
+      return [];
+    }
+
+    const address: Address[] = aAddress.map((u) => {
+      const {
+        addressId,
+        addressStreet,
+        addressDistrict,
+        addressCity,
+        addressState,
+        addressCep,
+        addressNumber,
+      } = u;
+
+      return Address.with(
+        addressId,
+        addressStreet,
+        addressDistrict,
+        addressCity,
+        addressState,
+        addressCep,
+        addressNumber
+      );
+    });
+
+    return address;
+  }
 }

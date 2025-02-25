@@ -4,6 +4,7 @@ import {
   AddressService,
   CreateOutputDto,
   FindOutPutDto,
+  ListFindOutPutDto,
 } from "../address.service";
 
 export class AddressServiceImplementation implements AddressService {
@@ -26,7 +27,7 @@ export class AddressServiceImplementation implements AddressService {
       addressDistrict,
       addressCity,
       addressState,
-      addressCep,    
+      addressCep,
       addressNumber
     );
 
@@ -53,9 +54,33 @@ export class AddressServiceImplementation implements AddressService {
       city: aAddress.city ?? "",
       state: aAddress.state ?? "",
       cep: aAddress.cep ?? "",
-      number: aAddress.number ?? ""
+      number: aAddress.number ?? "",
     };
 
+    return output;
+  }
+
+  public async searchMultipleId(
+    listId: string[]
+  ): Promise<ListFindOutPutDto[]> {
+    const aAddress = await this.repository.findManyByIds(listId);
+
+    if (!aAddress) {
+      return [];
+    }
+    const address = aAddress.map((u) => {
+      return {
+        id: u.id,
+        cep: u.cep ?? "",
+        state: u.state ?? "",
+        city: u.city ?? "",
+        district: u.district ?? "",
+        street: u.street ?? "",
+        number: u.number ?? "",
+      };
+    });
+
+    const output: ListFindOutPutDto[] = address;
     return output;
   }
 
