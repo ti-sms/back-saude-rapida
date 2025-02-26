@@ -13,10 +13,10 @@ function decryptDataMiddleware(req: Request, res: Response, next: NextFunction) 
       next();
     } catch (error) {
       console.log(error);
-      return res.status(400).json({ message: 'Erro ao descriptografar os dados' });
+      return res.status(400).json({ message: 'Erro ao converter os dados' });
     }
   } else {
-    return res.status(400).json({ message: 'Dados criptografados são necessários' });
+    return res.status(400).json({ message: 'Dados no formato incorreto' });
   }
 }
 

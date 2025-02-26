@@ -3,6 +3,7 @@ import { AddressController } from "./api/express/controllers/address/address.con
 import { LoginController } from "./api/express/controllers/authentication/authetication.controller";
 import { DepartmentController } from "./api/express/controllers/department/department.controller";
 import { HospitalController } from "./api/express/controllers/hospital/hospital.controller";
+import { LocalController } from "./api/express/controllers/local/local.controller";
 import { PersonController } from "./api/express/controllers/person/person.controller";
 import { SecretaryController } from "./api/express/controllers/secretary/secretary.controller";
 import { UserController } from "./api/express/controllers/user/user.controller";
@@ -34,15 +35,27 @@ function main() {
 
   // Controladores => Saúde rápida
   const controllerHospital = HospitalController.build();
+  const controllerLocal = LocalController.build();
 
   //Endpoints do saúde rápida----------------------------------------------------------------------------------------------------
 
+  // Endpoint de hospital
   api.addPostRoute("/hospital/create", controllerHospital.create, [
     decryptDataMiddleware,
   ]);
   api.addGetRoute("/hospital/list", controllerHospital.list);
   api.addGetRoute("/hospital/:id", controllerHospital.find);
   api.addUpdateRoute("/hospital/update/:id", controllerHospital.update, [
+    decryptDataMiddleware,
+  ]);  
+
+   // Endpoint de local
+   api.addPostRoute("/local/create", controllerLocal.create, [
+    decryptDataMiddleware,
+  ]);
+  api.addGetRoute("/local/list", controllerLocal.list);
+  api.addGetRoute("/local/:id", controllerLocal.find);
+  api.addUpdateRoute("/local/update/:id", controllerLocal.update, [
     decryptDataMiddleware,
   ]);  
 

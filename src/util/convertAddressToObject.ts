@@ -1,4 +1,4 @@
-import { Address, AddressProps } from "../../../entities/address/address";
+import { Address, AddressProps } from "../entities/address/address";
 
 export function convertAddressToObject(addressList: Address[]): AddressProps[] {
   return addressList.map((address) => {

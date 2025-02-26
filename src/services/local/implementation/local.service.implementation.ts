@@ -1,33 +1,27 @@
 import { Address, AddressProps } from "../../../entities/address/address";
-import { Hospital } from "../../../entities/hospital/hospital";
-import { Person } from "../../../entities/person/person";
+import { Local } from "../../../entities/local/local";
 import { AddressRepository } from "../../../repositories/address/address.repository";
-import { HospitalRepository } from "../../../repositories/hospital/hospital.repository";
-import {
-  CreateOutputDto,
-  FindOutPutDto,
-  HospitalService,
-  ListOutPutDto,
-} from "../hospital.service";
+import { LocalRepository } from "../../../repositories/local/local.repository";
 import { updateAddressesOnEntityList } from "../../../util/updateAddressHospital.service";
+import { CreateOutputDto, FindOutPutDto, ListOutPutDto } from "../local.service";
 
-export class HospitalServiceImplementation implements HospitalService {
+
+export class LocalServiceImplementation implements LocalServiceImplementation {
   private constructor(
-    readonly repository: HospitalRepository,
+    readonly repository: LocalRepository,
     readonly repositoryAddress: AddressRepository
   ) {}
 
   public static build(
-    repository: HospitalRepository,
+    repository: LocalRepository,
     repositoryAddress: AddressRepository
   ) {
-    return new HospitalServiceImplementation(repository, repositoryAddress);
+    return new LocalServiceImplementation(repository, repositoryAddress);
   }
 
   public async create(
     name: string,
     status: number,
-    description: string,
     address: AddressProps
   ): Promise<CreateOutputDto> {
     
@@ -42,33 +36,32 @@ export class HospitalServiceImplementation implements HospitalService {
 
     await this.repositoryAddress.save(aAddress);
 
-    const aHospital = Hospital.create(name, status, description, aAddress.id);
+    const aLocal = Local.create(name, status, aAddress.id);
 
-    await this.repository.save(aHospital);
+    await this.repository.save(aLocal);
 
     const output: CreateOutputDto = {
-      id: aHospital.id,
+      id: aLocal.id,
     };
 
     return output;
   }
 
-  public async find(hospitalId: string): Promise<FindOutPutDto> {
-    const aHospital = await this.repository.find(hospitalId);
+  public async find(id: string): Promise<FindOutPutDto> {
+    const aLocal = await this.repository.find(id);
 
-    if (!aHospital) {
-      throw new Error("O hospital não foi encontrado");
+    if (!aLocal) {
+      throw new Error("O local não foi encontrado");
     }
 
     const aAddress = await this.repositoryAddress.find(
-      aHospital.address as string
+      aLocal.address as string
     );
 
     const output: FindOutPutDto = {
-      id: aHospital.id,
-      name: aHospital.name,
-      status: aHospital.status,
-      description: aHospital.description,
+      id: aLocal.id,
+      name: aLocal.name,
+      status: aLocal.status,
       address: {
         addressId: aAddress?.id ?? "",
         addressStreet: aAddress?.street ?? "",
@@ -84,14 +77,13 @@ export class HospitalServiceImplementation implements HospitalService {
   }
 
   public async list(): Promise<ListOutPutDto[]> {
-    const aHospital = await this.repository.list();
+    const aLocal = await this.repository.list();
     let listId: string[] = [];
-    const hospital = aHospital.map((h) => {
+    const local = aLocal.map((h) => {
       listId.push(h.address as string);
       return {
         id: h.id,
         name: h.name,
-        description: h.description,
         address: h.address,
         status: h.status,
       };
@@ -99,7 +91,7 @@ export class HospitalServiceImplementation implements HospitalService {
 
     const listAddress = await this.repositoryAddress.findManyByIds(listId);
 
-    const output: ListOutPutDto[] = updateAddressesOnEntityList(listAddress, hospital);
+    const output: ListOutPutDto[] = updateAddressesOnEntityList(listAddress, local);
     return output;
   }
 
@@ -107,12 +99,11 @@ export class HospitalServiceImplementation implements HospitalService {
     id: string,
     name: string,
     status: number,
-    description: string,
     address: string
   ): Promise<void> {
-    const aHospital = Hospital.with(id, name, status, description, address);
+    const aLocal = Local.with(id, name, status, address);
     try {
-      await this.repository.update(aHospital);
+      await this.repository.update(aLocal);
 
     } catch (error) {
       console.log(error);
