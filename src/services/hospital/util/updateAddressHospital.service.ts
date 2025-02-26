@@ -1,11 +1,14 @@
 import { Address } from "../../../entities/address/address";
 import { ListOutPutDto } from "../hospital.service";
+import { convertAddressToObject } from "./convertAddressToObject";
 
-export function updateAddresses(ids: Address[], hospitals: ListOutPutDto[]): any[] {
-    return ids.map((id) => {
-      const hospital = hospitals.find(hospital => hospital.id === id.id);
+export function updateHospitalAddresses(ids: Address[], hospitals: ListOutPutDto[]): any[] {
+  const addressList = convertAddressToObject(ids);
+    return addressList.map((id) => {
+      const hospital = hospitals.find(hospital => hospital.address === id.addressId);
+
       return { 
-        id: id.id, 
+        id: hospital?.id, 
         name: hospital?.name,
         description: hospital?.description,
         status: hospital?.status,

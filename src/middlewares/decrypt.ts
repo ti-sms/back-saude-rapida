@@ -7,7 +7,6 @@ const secretKey = config.jwtSecret;
 function decryptDataMiddleware(req: Request, res: Response, next: NextFunction) {
   if (req.body.data) {
     try {
-      console.log(req.body.data);
       const bytes = CryptoJS.AES.decrypt(req.body.data, secretKey);
       const decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
       req.body = decryptedData; // Substitui o corpo da requisição pelos dados descriptografados

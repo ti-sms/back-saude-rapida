@@ -9,7 +9,7 @@ import {
   HospitalService,
   ListOutPutDto,
 } from "../hospital.service";
-import { updateAddresses } from "../util/updateAddressHospital.service";
+import { updateHospitalAddresses } from "../util/updateAddressHospital.service";
 
 export class HospitalServiceImplementation implements HospitalService {
   private constructor(
@@ -99,7 +99,7 @@ export class HospitalServiceImplementation implements HospitalService {
 
     const listAddress = await this.repositoryAddress.findManyByIds(listId);
 
-    const output: ListOutPutDto[] = updateAddresses(listAddress, hospital);
+    const output: ListOutPutDto[] = updateHospitalAddresses(listAddress, hospital);
     return output;
   }
 

@@ -8,6 +8,7 @@ export type AddressProps = {
   addressNumber: string | null;
 };
 
+
 export class Address {
     private constructor (readonly props: AddressProps){}
 
@@ -34,6 +35,10 @@ export class Address {
             addressNumber
         });
     }
+
+    public toObject() {
+        return { ...this.props };
+      }
     
     public get id(){
         return this.props.addressId;
